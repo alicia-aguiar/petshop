@@ -17,6 +17,24 @@ class Cadastro extends Model
         'qtd_disponivel',
         'estoque_minimo',
     ];
+    protected function casts(): array
+    {
+        return [
+            'preco_custo' => 'decimal:2',
+            'preco_venda' => 'decimal:2',
+            'qtd_disponivel' => 'integer',
+            'estoque_minimo' => 'integer',
+        ];
+    }
 
-    use HasFactory;
+    public function movimentacoes(): HasMany
+    {
+        return $this->hasMany(Movimentacao::class, 'produto_id');
+    }
+
+    public function abaixoDoMinimo(): bool
+    {
+        return $this->qtd_disponivel < $this->estoque_minimo;
+    }
 }
+
